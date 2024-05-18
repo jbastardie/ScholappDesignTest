@@ -1,10 +1,15 @@
 package com.example.scholappdesigntest
 
 import android.R.attr.animation
+import android.R.attr.fromXDelta
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.Animation.AnimationListener
+import android.view.animation.AnimationUtils
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -51,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                 Random.nextInt(100, 250)
             )
             alpha = Random.nextDouble(0.4, 0.8).toFloat()
-            translationX = Random.nextDouble(200.0, 600.0).toFloat()
+            translationX = Random.nextDouble(-600.0, 600.0).toFloat()
         }
     }
     private fun animateCloud(cloud: ImageView) {
@@ -76,7 +81,21 @@ class MainActivity : AppCompatActivity() {
             set.connect(cloud.id, ConstraintSet.BOTTOM, parentLayout.id, ConstraintSet.BOTTOM, 0)
             set.setVerticalBias(cloud.id, Random.nextDouble(0.0, 1.0).toFloat())
             set.applyTo(parentLayout)
-            animateCloud(cloud)
+            val anim = AnimationUtils.loadAnimation(this, R.anim.cloud_anim)
+            anim.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(animation: Animation?) {
+                    // actually, I don't need this method but I have to implement this.
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+
+                }
+
+                override fun onAnimationStart(animation: Animation?) {
+                    // actually, I don't need this method but I have to implement this.
+                }
+            })
+            cloud.startAnimation(anim)
         }
     }
 }
